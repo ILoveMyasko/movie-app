@@ -1,0 +1,5 @@
+{
+  "name": "CineBase",
+  "description": "A modern movie database frontend connected to a custom backend API.",
+  "requestFramePermissions": []
+}
