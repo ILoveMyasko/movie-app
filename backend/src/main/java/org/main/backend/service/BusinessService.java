@@ -20,6 +20,8 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
@@ -43,6 +45,13 @@ public class BusinessService {
        Director director = directorRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Director not found"));
        return ModelMapper.toDirectorDto(director);
+    }
+
+    public ResponseMovieDto getMovie (String id)
+    {
+        Movie movie = movieRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Movie not found"));
+        return ModelMapper.toMovieDto(movie);
     }
 
     public ResponseReviewDto createReview(CreateReviewDto reviewDto)
@@ -80,6 +89,7 @@ public class BusinessService {
                 .description(movieDto.getDescription())
                 .directorId(movieDto.getDirectorId())
                 .releaseYear(movieDto.getReleaseYear())
+                .imageUrl(movieDto.getImageUrl())
                 .build();
         Movie newMovie = movieRepository.save(movie);
         return ModelMapper.toMovieDto(newMovie);
@@ -111,4 +121,23 @@ public class BusinessService {
         Page<Movie> getMovies =  new PageImpl<>(movies, pageable, total);
         return getMovies.map(ModelMapper::toMovieDto);
     }
+
+    public Double getAverageRatingForMovie(String movieIdString) {
+
+        ObjectId movieId = new ObjectId(movieIdString);
+        List<Review> reviews = reviewRepository.findAllByMovieId(movieId);
+
+        if (reviews.isEmpty()) {
+            return 0.0;
+        }
+        double average = reviews.stream()
+                .mapToInt(Review::getRating)
+                .average()
+                .orElse(0.0);
+
+        return BigDecimal.valueOf(average)
+                .setScale(2, RoundingMode.HALF_UP)
+                .doubleValue();
+    }
+
 }

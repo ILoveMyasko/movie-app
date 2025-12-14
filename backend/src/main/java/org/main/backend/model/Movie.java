@@ -21,6 +21,7 @@ public class Movie {
     String genre;
     Integer releaseYear;
     String description;
+    String imageUrl;
     @Indexed
     String directorId;
     @Transient

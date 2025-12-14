@@ -12,4 +12,5 @@ public class ResponseMovieDto {
     Integer releaseYear;
     String description;
     String directorId;
+    String imageUrl;
 }

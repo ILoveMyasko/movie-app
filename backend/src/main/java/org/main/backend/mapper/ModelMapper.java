@@ -24,6 +24,7 @@ public class ModelMapper {
                 .releaseYear(movie.getReleaseYear())
                 .description(movie.getDescription())
                 .directorId(movie.getDirectorId())
+                .imageUrl(movie.getImageUrl())
                 .build();
     }
     public static ResponseReviewDto toReviewDto(Review review) {

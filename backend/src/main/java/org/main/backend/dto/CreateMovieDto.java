@@ -16,4 +16,5 @@ public class CreateMovieDto {
     String description;
     @Indexed @NotBlank
     String directorId;
+    String imageUrl;
 }

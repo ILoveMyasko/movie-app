@@ -40,11 +40,24 @@ public class RESTController {
         return ResponseEntity.ok(businessService.getDirector(id));
     }
 
+    @GetMapping @RequestMapping("/movie/{id}")
+    public ResponseEntity<ResponseMovieDto> getMovie(@PathVariable String id)
+    {
+        return ResponseEntity.ok(businessService.getMovie(id));
+    }
+
+
     @GetMapping @RequestMapping("/reviews")
     public ResponseEntity<Page<ResponseReviewDto>> getReviewsByMovieId(@RequestParam(required = true) String movieId,
                                                             @PageableDefault(size = 5) Pageable pageable)
     {
         return ResponseEntity.ok(businessService.getReviewsByMovieId(movieId, pageable));
+    }
+
+    @GetMapping("/movie/{movieId}/rating")
+    public ResponseEntity<Double> getMovieRating(@PathVariable String movieId) {
+        Double rating = businessService.getAverageRatingForMovie(movieId);
+        return ResponseEntity.ok(rating);
     }
 
     @PostMapping @RequestMapping("/review")
